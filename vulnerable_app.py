@@ -100,23 +100,25 @@ def weak_random_token():
 
 def insecure_temp_file():
     """
-    Vulnerability 9: Insecure temporary file creation
+    Secure temporary file creation (FIXED)
     """
     import tempfile
-    # VULNERABLE: Insecure temp file
-    temp = tempfile.mktemp()
+    # FIXED: Using secure mkstemp() instead of deprecated mktemp()
+    fd, temp = tempfile.mkstemp()
     with open(temp, 'w') as f:
         f.write("sensitive data")
+    os.close(fd)
     return temp
 
 
 def check_password(password):
     """
-    Vulnerability 10: Weak cryptographic hash (MD5)
+    Strong cryptographic hash for passwords (FIXED)
     """
     import hashlib
-    # VULNERABLE: MD5 is cryptographically weak
-    hashed = hashlib.md5(password.encode()).hexdigest()
+    # FIXED: Using SHA-256 instead of MD5 for better security
+    # Note: In production, use bcrypt or argon2 for password hashing
+    hashed = hashlib.sha256(password.encode()).hexdigest()
     return hashed
 
 
