@@ -16,8 +16,8 @@ def load_user_data(data):
 # Vulnerability: YAML unsafe load
 def load_config(config_string):
     """Load YAML config - using unsafe loader"""
-    # yaml.load without safe loader is vulnerable
-    return yaml.load(config_string)
+    # yaml.load with an explicit unsafe loader is vulnerable
+    return yaml.load(config_string, Loader=yaml.UnsafeLoader)
 
 # Vulnerability: Path traversal in file operations
 def delete_user_file(username, filename):
@@ -40,8 +40,8 @@ def run_user_script(script_name):
     subprocess.call(f"python {script_name}", shell=True)
 
 # Vulnerability: Hardcoded secret key
-SECRET_KEY = "my-secret-key-12345"
-JWT_SECRET = "jwt-secret-token-67890"
+SECRET_KEY = "EXAMPLE_SECRET_KEY_12345"
+JWT_SECRET = "EXAMPLE_JWT_SECRET_TOKEN_67890"
 
 # Vulnerability: Insecure random for security purposes
 import random

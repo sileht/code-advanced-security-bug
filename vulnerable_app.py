@@ -13,12 +13,14 @@ app = Flask(__name__)
 
 # Vulnerability 1: Hardcoded credentials
 DATABASE_PASSWORD = "admin123"
-API_KEY = "sk_live_1234567890abcdef"
+API_KEY = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
 
 # Vulnerability 2: SQL Injection
 @app.route('/user')
 def get_user():
     user_id = request.args.get('id')
+    if user_id is None:
+        return "Missing 'id' query parameter", 400
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
     # SQL Injection vulnerability - user input directly concatenated
@@ -32,6 +34,8 @@ def get_user():
 @app.route('/ping')
 def ping_host():
     host = request.args.get('host')
+    if host is None:
+        return "Missing 'host' query parameter", 400
     # Command injection vulnerability - user input passed to shell
     result = os.system('ping -c 1 ' + host)
     return f"Ping result: {result}"
@@ -68,4 +72,6 @@ def calculate():
 
 if __name__ == '__main__':
     # Running in debug mode with publicly accessible host
-    app.run(debug=True, host='0.0.0.0')
+    # Note: This is intentionally insecure for demonstration purposes
+    # Bind to 127.0.0.1 by default to avoid accidental network exposure
+    app.run(debug=True, host='127.0.0.1')

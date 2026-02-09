@@ -29,4 +29,10 @@ These files are intentionally insecure to demonstrate:
 - Common security anti-patterns in Python
 - How CodeQL scanning works
 
+## Requirements
+
+- Python 3.x
+- Flask and PyYAML (install via `pip install -r requirements.txt`)
+- Unix-like OS (some commands like `ping -c 1` are Unix-specific)
+
 **⚠️ WARNING: Never use this code in production!**
