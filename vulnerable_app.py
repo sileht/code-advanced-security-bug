@@ -116,9 +116,16 @@ def check_password(password):
     Strong cryptographic hash for passwords (FIXED)
     """
     import hashlib
-    # FIXED: Using SHA-256 instead of MD5 for better security
-    # Note: In production, use bcrypt or argon2 for password hashing
-    hashed = hashlib.sha256(password.encode()).hexdigest()
+    import os
+    import binascii
+    # FIXED: Use PBKDF2-HMAC-SHA256 with a per-password salt and many iterations
+    iterations = 100_000
+    salt = os.urandom(16)
+    dk = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, iterations, dklen=32)
+    salt_hex = binascii.hexlify(salt).decode("ascii")
+    dk_hex = binascii.hexlify(dk).decode("ascii")
+    # Format: algorithm$iterations$salt$hash
+    hashed = f"pbkdf2_sha256${iterations}${salt_hex}${dk_hex}"
     return hashed
 
 
